@@ -34,7 +34,7 @@ public class CandidateController {
 		cd = candidates;
 
 	}
-
+        // To view the list of candidates
 	@RequestMapping("/viewcandidates")
 	public String showCandidateList(@RequestParam(name = "page", defaultValue = "1") int page, Model model) {
 		int pageSize = 10; // Number of records to display per page
@@ -49,7 +49,7 @@ public class CandidateController {
 		List<Candidate> candidatesOnPage = candidates.subList(startIndex, endIndex);
 		List<CandidateIO> candidateOutputs = modelMapper.map(candidatesOnPage, new TypeToken<List<CandidateIO>>() {
 		}.getType());
-
+                logger.info("Displaying List of Candidates!!");
 		model.addAttribute("candidates", candidateOutputs);
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("currentPage", page);
