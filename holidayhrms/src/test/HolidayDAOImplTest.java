@@ -1,104 +1,230 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.testng.Assert;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import DAO.HolidayDAOImpl;
 import models.GradeHoliday;
 import models.Holiday;
+import models.HrmsJobGrade;
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.Mockito.*;
+import static org.testng.Assert.assertEquals;
 
 public class HolidayDAOImplTest {
 
-	@Mock
-	private EntityManager entityManager;
+    @InjectMocks
+    private HolidayDAOImpl holidayDAO;
 
-	@Mock
-	private CriteriaBuilder criteriaBuilder;
+    @Mock
+    private EntityManager entityManager;
 
-	@Mock
-	private CriteriaQuery<Holiday> holidayCriteriaQuery;
+    @Mock
+    private CriteriaBuilder criteriaBuilder;
 
-	@Mock
-	private Root<Holiday> holidayRoot;
+    @Mock
+    private CriteriaQuery<Holiday> criteriaQuery;
 
-	@Mock
-	private TypedQuery<Holiday> holidayQuery;
+    @Mock
+    private Root<Holiday> root;
 
-	@Mock
-	private TypedQuery<GradeHoliday> gradeholidayQuery;
+    @Mock
+    private TypedQuery<Holiday> holidayTypedQuery;
 
-	@InjectMocks
-	private HolidayDAOImpl holidayDAO;
+    @Mock
+    private TypedQuery<GradeHoliday> gradeHolidayTypedQuery;
 
-	@BeforeMethod
-	public void setup() {
-		MockitoAnnotations.initMocks(this);
-	}
+    @BeforeMethod
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
 
-	@Test
-	public void testFindAllHolidays() {
-		// Create a list of holidays
-		List<Holiday> holidays = new ArrayList<>();
-		holidays.add(new Holiday());
-		holidays.add(new Holiday());
+    @Test
+    public void testFindAllHolidays() {
+        List<Holiday> holidays = new ArrayList<>();
+        holidays.add(new Holiday());
+        when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+        when(criteriaBuilder.createQuery(Holiday.class)).thenReturn(criteriaQuery);
+        when(criteriaQuery.from(Holiday.class)).thenReturn(root);
+        when(criteriaQuery.select(root)).thenReturn(criteriaQuery);
+        when(criteriaBuilder.asc(root.get("hday_date"))).thenReturn(null);
+        when(entityManager.createQuery(criteriaQuery)).thenReturn(holidayTypedQuery);
+        when(holidayTypedQuery.getResultList()).thenReturn(holidays);
 
-		Mockito.when(entityManager.createQuery("SELECT h FROM Holiday h ORDER BY h.hday_date ASC", Holiday.class))
-				.thenReturn(holidayQuery);
-		Mockito.when(holidayQuery.getResultList()).thenReturn(holidays);
+        List<Holiday> result = holidayDAO.findAllHolidays();
 
-		// Call the method under test
-		List<Holiday> result = holidayDAO.findAllHolidays();
+        assertEquals(result, holidays);
+        verify(entityManager).getCriteriaBuilder();
+        verify(criteriaBuilder).createQuery(Holiday.class);
+        verify(criteriaQuery).from(Holiday.class);
+        verify(criteriaQuery).select(root);
+        verify(criteriaBuilder).asc(root.get("hday_date"));
+        verify(entityManager).createQuery(criteriaQuery);
+        verify(holidayTypedQuery).getResultList();
+    }
 
-		// Verify the result
-		Assert.assertEquals(result.size(), 2);
-		// You can add more assertions based on the specific behavior you expect
-	}
+    @Test
+    public void testFindHolidayById() {
+        GradeHoliday gradeHoliday = new GradeHoliday();
+        String id = "123";
+        when(entityManager.find(GradeHoliday.class, id)).thenReturn(gradeHoliday);
 
-	@Test
-	public void testFindHolidayById() {
-		// Create a GradeHoliday object
-		GradeHoliday gradeHoliday = new GradeHoliday();
+        GradeHoliday result = holidayDAO.findHolidayById(id);
 
-		// Mock the behavior of the EntityManager
-		Mockito.when(entityManager.find(GradeHoliday.class, "1")).thenReturn(gradeHoliday);
+        assertEquals(result, gradeHoliday);
+        verify(entityManager).find(GradeHoliday.class, id);
+    }
 
-		// Call the method under test
-		GradeHoliday result = holidayDAO.findHolidayById("1");
+    @Test
+    public void testFindAllGradeHolidays() {
+        List<GradeHoliday> gradeHolidays = new ArrayList<>();
+        gradeHolidays.add(new GradeHoliday());
+        when(entityManager.createQuery("SELECT gh FROM GradeHoliday gh", GradeHoliday.class))
+                .thenReturn(gradeHolidayTypedQuery);
+        when(gradeHolidayTypedQuery.getResultList()).thenReturn(gradeHolidays);
 
-		// Verify the result
-		Assert.assertEquals(result, gradeHoliday);
-	}
+        List<GradeHoliday> result = holidayDAO.findAllGradeHolidays();
 
-	@Test
-	public void testFindAllGradeHolidays() {
-		// Create a list of GradeHolidays
-		List<GradeHoliday> gradeHolidays = new ArrayList<>();
-		gradeHolidays.add(new GradeHoliday());
-		gradeHolidays.add(new GradeHoliday());
+        assertEquals(result, gradeHolidays);
+        verify(entityManager).createQuery("SELECT gh FROM GradeHoliday gh", GradeHoliday.class);
+        verify(gradeHolidayTypedQuery).getResultList();
+    }
 
-		// Mock the behavior of the EntityManager and TypedQuery
-		Mockito.when(entityManager.createQuery("SELECT gh FROM GradeHoliday gh", GradeHoliday.class))
-				.thenReturn(gradeholidayQuery);
-		Mockito.when(gradeholidayQuery.getResultList()).thenReturn(gradeHolidays);
+    @Test
+    public void testFindAllOptedHolidays() {
+        List<Holiday> holidays = new ArrayList<>();
+        holidays.add(new Holiday());
+        when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+        when(criteriaBuilder.createQuery(Holiday.class)).thenReturn(criteriaQuery);
+        when(criteriaQuery.from(Holiday.class)).thenReturn(root);
+        when(criteriaQuery.select(root)).thenReturn(criteriaQuery);
+        when(criteriaBuilder.equal(root.get("hday_type"), "OPTN")).thenReturn(null);
+        when(entityManager.createQuery(criteriaQuery)).thenReturn(holidayTypedQuery);
+        when(holidayTypedQuery.getResultList()).thenReturn(holidays);
 
-		// Call the method under test
-		List<GradeHoliday> result = holidayDAO.findAllGradeHolidays();
+        List<Holiday> result = holidayDAO.findAlloptedHolidays();
 
-		// Verify the result
-		Assert.assertEquals(result.size(), 2);
-	}
+        assertEquals(result, holidays);
+        verify(entityManager).getCriteriaBuilder();
+        verify(criteriaBuilder).createQuery(Holiday.class);
+        verify(criteriaQuery).from(Holiday.class);
+        verify(criteriaQuery).select(root);
+        verify(criteriaBuilder).equal(root.get("hday_type"), "OPTN");
+        verify(entityManager).createQuery(criteriaQuery);
+        verify(holidayTypedQuery).getResultList();
+    }
+    @Test
+    public void testCountMandHolidays() {
+        Long count = 5L;
+        CriteriaQuery<Long> countQuery = mock(CriteriaQuery.class);
+        Root<Holiday> countRoot = mock(Root.class);
+        Expression<Long> countExpression = mock(Expression.class);
+        TypedQuery<Long> countTypedQuery = mock(TypedQuery.class);
+
+        when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
+        when(criteriaBuilder.createQuery(Long.class)).thenReturn(countQuery);
+        when(countQuery.from(Holiday.class)).thenReturn(countRoot);
+        when(criteriaBuilder.count(countRoot)).thenReturn(countExpression);
+        when(countQuery.select(countExpression)).thenReturn(countQuery);
+        when(criteriaBuilder.equal(countRoot.get("hday_type"), "MAND")).thenReturn(null);
+        when(entityManager.createQuery(countQuery)).thenReturn(countTypedQuery);
+        when(countTypedQuery.getSingleResult()).thenReturn(count);
+
+        int result = holidayDAO.countMandHolidays();
+
+        assertEquals(result, count.intValue());
+        verify(entityManager).getCriteriaBuilder();
+        verify(criteriaBuilder).createQuery(Long.class);
+        verify(countQuery).from(Holiday.class);
+        verify(criteriaBuilder).count(countRoot);
+        verify(countQuery).select(countExpression);
+        verify(criteriaBuilder).equal(countRoot.get("hday_type"), "MAND");
+        verify(entityManager).createQuery(countQuery);
+        verify(countTypedQuery).getSingleResult();
+    }
+
+
+    public void testGetEmployeeoptionalholidaysCount() {
+        int id = 123;
+        int year = 2023;
+        Long count = 5L;
+        String jpqlQuery = "SELECT COUNT(e) FROM EmployeeOptedLeaves e WHERE e.optedleavesId.employeeId = :employeeId AND  EXTRACT(YEAR FROM e.optedleavesId.holidayDate) = :year";
+        TypedQuery<Long> countQuery = mock(TypedQuery.class);
+        when(entityManager.createQuery(jpqlQuery, Long.class)).thenReturn(countQuery);
+        when(countQuery.setParameter("employeeId", id)).thenReturn(countQuery);
+        when(countQuery.setParameter("year", year)).thenReturn(countQuery);
+        when(countQuery.getSingleResult()).thenReturn(count);
+
+        long result = holidayDAO.getEmployeeoptionalholidaysCount(id, year);
+
+        assertEquals(result, count.longValue());
+        verify(entityManager).createQuery(jpqlQuery, Long.class);
+        verify(countQuery).setParameter("employeeId", id);
+        verify(countQuery).setParameter("year", year);
+        verify(countQuery).getSingleResult();
+    }
+
+    @Test
+    public void testGetAllJobGradesInfo() {
+        List<HrmsJobGrade> jobGrades = new ArrayList<>();
+        jobGrades.add(new HrmsJobGrade());
+        
+        TypedQuery<HrmsJobGrade> typedQuery = mock(TypedQuery.class);
+        when(entityManager.createQuery(eq("SELECT jg FROM HrmsJobGrade jg"), eq(HrmsJobGrade.class)))
+                .thenReturn(typedQuery);
+        when(typedQuery.getResultList()).thenReturn(jobGrades);
+
+        List<HrmsJobGrade> result = holidayDAO.getAllJobGradesInfo();
+
+        assertEquals(result, jobGrades);
+        verify(entityManager).createQuery(eq("SELECT jg FROM HrmsJobGrade jg"), eq(HrmsJobGrade.class));
+        verify(typedQuery).getResultList();
+    }
+
+
+
+
+
+
+    @Test
+    public void testSaveJobGrade() {
+        HrmsJobGrade jobGrade = new HrmsJobGrade();
+        holidayDAO.saveJobGrade(jobGrade);
+        verify(entityManager).persist(jobGrade);
+    }
+
+    @Test
+    public void testSaveJobGradeHoliday() {
+        GradeHoliday gradeHoliday = new GradeHoliday();
+        holidayDAO.saveJobGradeHoliday(gradeHoliday);
+        verify(entityManager).persist(gradeHoliday);
+    }
+
+    @Test
+    public void testUpdateJobGradeHoliday() {
+        GradeHoliday gradeHoliday = new GradeHoliday();
+        GradeHoliday holidayData = new GradeHoliday();
+        when(entityManager.find(GradeHoliday.class, gradeHoliday.getJbgr_id())).thenReturn(holidayData);
+
+        holidayDAO.updateJobGradeHoliday(gradeHoliday);
+
+        assertEquals(holidayData.getJbgr_totalnoh(), gradeHoliday.getJbgr_totalnoh());
+        verify(entityManager).find(GradeHoliday.class, gradeHoliday.getJbgr_id());
+        verify(entityManager).merge(holidayData);
+    }
 }

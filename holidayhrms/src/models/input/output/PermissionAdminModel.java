@@ -1,4 +1,4 @@
-package models;
+package models.input.output;
 
 public class PermissionAdminModel {
 

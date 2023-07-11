@@ -27,9 +27,9 @@ import com.google.gson.Gson;
 import DAO_Interfaces.ApplyPermissionDAO;
 import models.ApplyPermissions;
 import models.Employee;
-import models.PermissionAdminModel;
 import models.PermissionCompositeKey;
-import models.PermissionInputModel;
+import models.input.output.PermissionAdminModel;
+import models.input.output.PermissionInputModel;
 
 @Controller
 public class PermissionsController {
