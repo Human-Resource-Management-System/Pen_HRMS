@@ -2,6 +2,7 @@ package service_interfaces;
 
 import java.util.List;
 
+import models.Candidate;
 import models.input.output.OfferDiffModel;
 
 public interface EmploymentInductionServiceInterface {
@@ -11,5 +12,9 @@ public interface EmploymentInductionServiceInterface {
 	List<OfferDiffModel> getAllEmploymentOffers();
 
 	String getStatusById(Integer indcEmofId);
+
+	List<Candidate> getRejecetedList();
+
+	void updateStatus(int candidateId);
 
 }

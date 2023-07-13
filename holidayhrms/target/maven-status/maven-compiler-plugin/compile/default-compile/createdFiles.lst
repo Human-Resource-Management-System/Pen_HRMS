@@ -12,7 +12,6 @@ DAO\EmployeeLeaveRequestDAOImpl.class
 service\EmployeeAttendanceService.class
 DAO_Interfaces\EmployeeOptedLeavesDAO.class
 models\EmployeeParameter.class
-models\PermissionAdminModel.class
 DAO\EmployeeAttendanceDAOImpl.class
 DAO\JobGradeHolidaysDAOImpl.class
 controllers\LoginController.class
@@ -20,6 +19,7 @@ models\EmployeeLeaveRequest.class
 DAO\PayRollDAOImpl.class
 models\EmployeeAttendanceId.class
 models\input\output\OfferDiffModel.class
+models\input\output\CandidateDTO.class
 DAO\EmploymentInductionDocDAOImpl.class
 models\EmployeeAttendance.class
 models\input\output\SaveInductioninput.class
@@ -38,10 +38,12 @@ models\Employee.class
 controllers\EmployeeController$3.class
 models\Candidate.class
 models\input\output\MailOtpModel.class
+test\CandidateControllerTest.class
 test\TestEmploymentInductionDocDAOImpl.class
 controllers\AttendanceController.class
 models\InductionDocumentTypes.class
 models\Holiday.class
+test\PermissionsControllerTest.class
 service\EmployeeLeaveService.class
 models\Induction.class
 controllers\EmployeeController$10.class
@@ -65,7 +67,6 @@ models\ApprovedLeaveModel.class
 DAO_Interfaces\CandidateDAO.class
 models\input\output\DocumentInputModel.class
 DAO_Interfaces\OfferLetterDAO.class
-models\PermissionInputModel.class
 models\GradeHoliday.class
 DAO\CandidateDAOImpl.class
 service_interfaces\PayRollService.class
@@ -83,10 +84,12 @@ test\TestReferenceDocumentServiceImpl.class
 DAO\ApplyPermissionDAOImpl.class
 DAO_Interfaces\EmployeeLeaveRequestDAO.class
 models\AttendanceEvent.class
+models\input\output\PermissionAdminModel.class
 controllers\EmployeeController$2.class
 controllers\CandidateController$1.class
 models\EmployeeRequestResult.class
 DAO\EmpDAO.class
+test\HolidayControllerTest.class
 DAO\EmployeeDAOImpl.class
 models\EmployeeOptedLeaves.class
 test\OfferLetterControllerTest.class
@@ -130,6 +133,7 @@ test\TestReferenceDocumentDAOImpl.class
 models\JobGradeHolidays.class
 service\EmployeeLoginService.class
 test\PayRollServiceImplTest.class
+models\input\output\PermissionInputModel.class
 controllers\LeaveController.class
 test\CandidateDAOImplTest.class
 models\EmployeeLeaveRequestId.class

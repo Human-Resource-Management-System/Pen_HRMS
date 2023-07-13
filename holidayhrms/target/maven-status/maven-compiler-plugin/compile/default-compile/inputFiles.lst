@@ -20,6 +20,7 @@ C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service_interface
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service_interfaces\ReferenceDocumentServiceInterface.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\AppConfig\AppConfig.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\Admin.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\HolidayControllerTest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\EmployeeDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\EmploymentInductionDocumentViewModel.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\JobGradeHolidaysDAOImpl.java
@@ -46,9 +47,11 @@ C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO_Interfaces\Em
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\addinductionDOC.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\TestInductionDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\HolidayDAOImpl.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\PermissionsControllerTest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\PayRollDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\EmployeePayRollOutputModel.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\HrmsEmploymentOffer.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\PermissionInputModel.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\controllers\PermissionsController.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO_Interfaces\OfferLetterDAO.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\MailOtpModel.java
@@ -62,7 +65,6 @@ C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeeAt
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service_interfaces\EmployeeAttendanceServiceInterface.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\GradeHoliday.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\JobGradeLeavesOutModel.java
-C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\PermissionAdminModel.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeeOptedLeaves.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeeParameter.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\EmpDAO.java
@@ -111,11 +113,13 @@ C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\controllers\Candi
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\OfferLetterDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service\HashGenerator.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\HrmsJobGrade.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\PermissionAdminModel.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\Candidate.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\ReferenceDocumentDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\JobGradeWiseLeaves.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\TestEmploymentInductionService.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmploymentOfferDocComposite.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\CandidateControllerTest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service\EmployeeLeaveService.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\OfferLetterControllerTest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeeLeaveRequestId.java
@@ -124,10 +128,10 @@ C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service\Reference
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO_Interfaces\JobGradeHolidaysDAO.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\test\PayRollServiceImplTest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeePayslip.java
+C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\input\output\CandidateDTO.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO_Interfaces\EmployeeAttendanceDAO.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\EmployeeRequestResult.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\DAO\EmployeeOptedLeavesDAOImpl.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\AttendanceRequest.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\InductionDocumentTypes.java
 C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\service\EmployeeLoginService.java
-C:\Users\chandrasekhar.s\git\updated_hrms_spin\holidayhrms\src\models\PermissionInputModel.java

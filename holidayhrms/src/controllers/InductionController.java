@@ -92,20 +92,28 @@ public class InductionController {
 	@RequestMapping("/rejectedOfferList") // view the list of candidates to be rejected
 	public String getRejectedCandidates(Model model) {
 		logger.info("Showing  Candidates to be Rejected.");
-		// logger.debug("Retrieving all inductions from the InductionDAO.");
 		List<CandidateDTO> rejected = idao.getCandidatesForRejected();
 		model.addAttribute("rejected", rejected);
 		logger.info("Moved to the RejectedCandidates jsp page.");
-		return "rejectedCandidates"; // opens the inductions.jsp page
+		return "rejectedCandidates";
 	}
 
-	@RequestMapping(value = "/reject", method = RequestMethod.POST) // view the list of inductions conducted
-	public String getRejectedList(@RequestParam("candidateId") int candidateId, Model model) {
+	@RequestMapping(value = "/rejectList", method = RequestMethod.GET) // view the list of candidates to be rejected
+																		// after updating
+	public String getRejected(@RequestParam("candidateId") int candidateId, Model model) {
+		logger.info("Updating the status of the rejected candidates.");
+		indServ.updateStatus(candidateId);
+		logger.info("Showing  Candidates to be Rejected.");
+		List<CandidateDTO> rejected = idao.getCandidatesForRejected();
+		model.addAttribute("rejected", rejected);
+		logger.info("Moved to the RejectedCandidates jsp page.");
+		return "rejectedCandidates";
+	}
+
+	@RequestMapping(value = "/reject", method = RequestMethod.GET) // view the list of inductions conducted
+	public String getRejectedList(Model model) {
 		logger.info("Showing OfferRejected/Suspended Canidates .");
-		List<Candidate> rejectedList = indServ.getRejecetedList(candidateId);
-		// for(Candidate c : rejectedList) {
-		// System.out.println(c.getCandId());
-		// }
+		List<Candidate> rejectedList = indServ.getRejecetedList();
 		System.out.println(rejectedList.toString());
 		model.addAttribute("rejectedList", rejectedList);
 		logger.info("Moved to the Reject jsp page.");

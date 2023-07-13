@@ -447,6 +447,36 @@
     	  });
     	} 
     
+    function rejectedCandidates() {
+    	  $.ajax({
+    	    type: "GET",
+    	    url: "reject",
+    	    success: function(response) {
+    	      var containerDiv = $("#main");
+    	      containerDiv.html(response);
+    	     
+    	    },
+    	    error: function() {
+    	      alert("Error occurred. Please try again later.");
+    	    }
+    	  });
+    	}
+      
+      function toReject() {
+    	  $.ajax({
+    	    type: "GET",
+    	    url: "rejectedOfferList",
+    	    success: function(response) {
+    	      var containerDiv = $("#main");
+    	      containerDiv.html(response);
+    	     
+    	    },
+    	    error: function() {
+    	      alert("Error occurred. Please try again later.");
+    	    }
+    	  });
+    	}
+    
     function providedOffers() {
     	  $.ajax({
     	    type: "GET",
@@ -476,6 +506,8 @@
   	    }
   	  });
   	} 
+    
+    
     
     function getHolidaysByGrade() {
     	  $.ajax({
@@ -756,6 +788,14 @@
               
                <li class="item">
                 <a href="javascript:void(0)"  onclick="issueOffer();"><i class="ri-file-list-line"></i> Issue</a>
+              </li>
+              
+               <li class="item">
+                <a href="javascript:void(0)" onclick="toReject();"><i class="ri-file-list-line"></i>To Reject</a>
+              </li>
+              
+                <li class="item">
+                <a href="javascript:void(0)" onclick="rejectedCandidates();"><i class="ri-file-list-line"></i>Rejected</a>
               </li>
               
             </ul>
