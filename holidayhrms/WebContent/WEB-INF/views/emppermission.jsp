@@ -36,6 +36,9 @@
       success: function(response) {
         var containerDiv = $("#msg");
         containerDiv.text("successfully Applied");
+        setTimeout(() => {
+			location.reload();
+		}, 1000);
       },
       error: function() {
         alert("Error occurred. Please try again later.");

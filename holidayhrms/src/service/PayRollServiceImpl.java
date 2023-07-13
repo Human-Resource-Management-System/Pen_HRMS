@@ -1,24 +1,61 @@
 package service;
 
+import java.sql.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import DAO_Interfaces.ApplyPermissionDAO;
+import models.EmployeeRequestResult;
+import service_interfaces.EmployeeAttendanceServiceInterface;
 import service_interfaces.PayRollService;
 
 public class PayRollServiceImpl implements PayRollService {
+
+	@Autowired
+	public PayRollServiceImpl(EmployeeAttendanceServiceInterface employeeAttendanceService, ApplyPermissionDAO apdi) {
+		this.employeeAttendanceService = employeeAttendanceService;
+		this.apdi = apdi;
+	}
+
+	public PayRollServiceImpl() {
+
+	}
 
 	private double total, basicpay, netpay, hra, ta, da, additions;
 	private double deductions_sal, pf, esi, gratuity;
 	private double ptax = 200;
 	private double tax = 0;
+	private int daysAttendedWithoutMin = 0;
 	private final Logger logger = LoggerFactory.getLogger(PayRollServiceImpl.class);
 
+	private EmployeeAttendanceServiceInterface employeeAttendanceService;
+	private ApplyPermissionDAO apdi;
+
 	@Override
-	public double calculateBasicPay(double basicpay) {
+	public double calculateBasicPay(double basicpay, int month) {
 		// TODO Auto-generated method stub
 		logger.info("calculating basic pay");
 
+		System.out.println("before" + basicpay);
+
+		System.out.println(daysAttendedWithoutMin);
+
+		if (daysAttendedWithoutMin != 0) {
+			int daysinMonth = YearMonth.of(LocalDate.now().getYear(), month).lengthOfMonth();
+			double dailyPay = (basicpay / daysinMonth);
+			System.out.println(dailyPay);
+			basicpay = basicpay - (dailyPay * daysAttendedWithoutMin);
+		}
+
 		this.basicpay = basicpay;
+		System.out.println("after" + basicpay);
 		return basicpay;
 	}
 
@@ -111,6 +148,30 @@ public class PayRollServiceImpl implements PayRollService {
 		logger.info("calculating total pay");
 		this.total = basicpay + hra + ta + da;
 		return total;
+	}
+
+	public void getAttendancePayCutCount(int id, int year, int month) {
+		int daysAttendedWithoutMin = 0;
+		EmployeeRequestResult attendancedata = employeeAttendanceService.calculateAttendance(id, year, month);
+		Map<LocalDateTime, Duration> data = attendancedata.getAttendanceData();
+		for (Map.Entry<LocalDateTime, Duration> records : data.entrySet()) {
+			System.out.println("key " + records.getKey() + "value" + records.getValue());
+			long hours = records.getValue().toHours();
+			if (hours < 8) {
+				Date date = Date.valueOf(records.getKey().toLocalDate());
+				long count = apdi.getEmployeeAndPermissionRequestDataCountPerMonth(id, month,
+						LocalDate.now().getYear());
+				if (count == 0) {
+					daysAttendedWithoutMin++;
+				} else {
+					if (hours + 2 < 8)
+						daysAttendedWithoutMin++;
+				}
+			}
+
+		}
+		System.out.println(daysAttendedWithoutMin);
+		this.daysAttendedWithoutMin = daysAttendedWithoutMin;
 	}
 
 }

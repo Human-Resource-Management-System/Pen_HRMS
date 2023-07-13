@@ -32,10 +32,10 @@ public interface EmployeeAttendanceServiceInterface {
 	/**
 	 * Calculates the attendance result based on the provided punch data.
 	 * 
-	 * @param punchData The punch data.
+	 *
 	 * @return The attendance result.
 	 */
-	EmployeeRequestResult calculateAttendance(List<Object[]> punchData);
+	EmployeeRequestResult calculateAttendance(int id, int year, int month);
 
 	/**
 	 * Converts the given cell value to a LocalDateTime object.

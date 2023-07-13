@@ -10,6 +10,7 @@ import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -179,7 +180,7 @@ public class EmployeeController {
 
 	// To update the address in the employee profile
 	@RequestMapping(value = "/update_address", method = RequestMethod.POST)
-	public String updateAddress(@ModelAttribute EmployeeOutput emp, Model model) {
+	public ResponseEntity<String> updateAddress(@ModelAttribute EmployeeOutput emp, Model model) {
 		logger.info("REquested for updating address of an employee ");
 
 		Employee erm = modelMapper.map(emp, new TypeToken<Employee>() {
@@ -187,7 +188,7 @@ public class EmployeeController {
 		empserv.updateAddress(erm.getEmplId(), erm.getEmplAddress());
 		logger.info("Updated address of an employee ");
 
-		return "index2";
+		return ResponseEntity.ok("success");
 
 	}
 

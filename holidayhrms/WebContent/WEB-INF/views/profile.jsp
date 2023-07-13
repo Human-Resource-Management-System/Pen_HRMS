@@ -9,6 +9,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile Page</title>
    <link rel="stylesheet" type="text/css" href="./css/profile.css">
+   
+   <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+   
 <style>
 /* Profile Container */
 .profile-container {
@@ -104,7 +107,7 @@ background: linear-gradient(to bottom, #d4e4f7, #a3c7e9);
 <body>
   <div class="profile-container">
     <div class="profile-details">
-      <form action="update_address" method="POST">
+      <form  id="profile">
         <% EmployeeOutput empdet = (EmployeeOutput) request.getAttribute("empdet"); %>
         <div class="personal-details">
           <h2>Personal Details</h2>
@@ -156,7 +159,7 @@ background: linear-gradient(to bottom, #d4e4f7, #a3c7e9);
             
           </div>
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-primary" onclick="update()">Save</button>
       </form>
     </div>
     <div class="profile-picture">
@@ -164,5 +167,27 @@ background: linear-gradient(to bottom, #d4e4f7, #a3c7e9);
       <img src="<%=imagePath+empdet.getEmplPhoto()%>" alt="profile-picture" height="200px" width="200px">
     </div>
   </div>
+  
+  <script type="text/javascript">
+ 
+  function update(){
+  
+  $.ajax({
+	  url:'update_address',
+	  type:'POST',
+	  data: $("#profile").serialize(),
+	  success: function(response){
+		  alert(response);
+		  location.reload();
+	  },
+      error:function(error){
+    	alert(error);  
+      }
+  });
+  
+  }
+  
+  </script>
+  
 </body>
 </html>

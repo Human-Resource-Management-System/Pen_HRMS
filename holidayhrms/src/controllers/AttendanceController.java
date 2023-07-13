@@ -111,16 +111,7 @@ public class AttendanceController {
 
 			logger.info("Processing attendance data for year,month,employee ID");
 
-			List<Object[]> results = employeeAttendanceDAO.getPunchInAndPunchOutDataForYearAndMonthAndEmployee(id, year,
-					month);
-			// Retrieves the punch in and punch out data for the specified year, month, and employee ID from the DAO
-
-			if (results == null || results.isEmpty()) {
-
-				logger.warn("No attendance data found for year,month,employee ID");
-			}
-
-			EmployeeRequestResult response = employeeAttendanceService.calculateAttendance(results);
+			EmployeeRequestResult response = employeeAttendanceService.calculateAttendance(id, year, month);
 			// Calls the service method to calculate the attendance based on the retrieved results
 
 			logger.info("Attendance calculated for year,month,employee ID");

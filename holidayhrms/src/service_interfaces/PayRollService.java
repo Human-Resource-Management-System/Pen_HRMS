@@ -13,7 +13,7 @@ public interface PayRollService {
 	 * @param fixedPay The fixed pay.
 	 * @return The calculated basic pay.
 	 */
-	double calculateBasicPay(double fixedPay);
+	double calculateBasicPay(double fixedPay, int month);
 
 	/**
 	 * 
@@ -110,4 +110,6 @@ public interface PayRollService {
 	 * @return The calculated total pay.
 	 */
 	double calculateTotalPay();
+
+	public void getAttendancePayCutCount(int id, int year, int month);
 }

@@ -9,6 +9,7 @@ function acceptPermission(empId, index) {
         data: { id: empId, eprq_status: 'accept', index: index },
         success: function(response) {
             console.log("Accept permission successful");
+            alert("Permission Accepted.");
             location.reload();
             // TODO: Handle the success response if needed
         },
@@ -30,6 +31,7 @@ function rejectPermission(empId, index) {
         type: "POST",
         data: { id: empId, status: 'reject', index: index },
         success: function(response) {
+            alert("Permission Rejected.");
             console.log("Reject permission successful");
             // TODO: Handle the success response if needed
             location.reload();

@@ -103,7 +103,8 @@ public class PayRollController {
 		logger.info("Setting values into input model");
 		payRollInput.setId(id);
 		payRollInput.setmonthYear(month + "-" + year);
-		payRollInput.setBasicPay(payRollservice.calculateBasicPay(basicsal / 12));
+		payRollservice.getAttendancePayCutCount(id, year, month);
+		payRollInput.setBasicPay(payRollservice.calculateBasicPay((basicsal / 12), month));
 		payRollInput.setFixedPay(fixedsal / 12);
 		payRollInput.setVariablePay(variablesal / 12);
 		payRollInput.setGratuity(payRollservice.calculateGratuity((ctc * 0.1) - 200));
@@ -235,5 +236,4 @@ public class PayRollController {
 		return "EmployeeSidePaySlip";
 
 	}
-
 }

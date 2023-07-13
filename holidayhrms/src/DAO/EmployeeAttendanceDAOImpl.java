@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import DAO_Interfaces.EmployeeAttendanceDAO;
 import models.EmployeeAttendance;
@@ -27,6 +28,7 @@ public class EmployeeAttendanceDAOImpl implements EmployeeAttendanceDAO {
 
 	// Saves the employee attendance record to the database.
 	@Override
+	@Transactional
 	public void save(EmployeeAttendance employeeAttendance) {
 		entityManager.persist(employeeAttendance);
 	}

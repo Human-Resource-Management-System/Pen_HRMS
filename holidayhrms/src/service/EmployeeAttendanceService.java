@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,9 +24,6 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,12 +43,12 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 
 	private EmployeeAttendanceDAO employeeAttendanceDAO;
 
- 
 	private EmployeeAttendance attendance;
 	private EmployeeAttendanceId attendanceId;
 
 	@Autowired
-	public EmployeeAttendanceService(EmployeeAttendanceDAO employeeAttendanceDAO,EmployeeAttendance attendance, EmployeeAttendanceId attendanceId) {
+	public EmployeeAttendanceService(EmployeeAttendanceDAO employeeAttendanceDAO, EmployeeAttendance attendance,
+			EmployeeAttendanceId attendanceId) {
 		this.employeeAttendanceDAO = employeeAttendanceDAO;
 		this.attendance = attendance;
 		this.attendanceId = attendanceId;
@@ -83,8 +81,7 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 				// Format punch-out time
 				String formattedPunchOut = punchOut.format(outputFormatter);
 				// Create AttendanceEvent object for punch-in event
-				AttendanceEvent attendanceEvent = new AttendanceEvent()
-						;
+				AttendanceEvent attendanceEvent = new AttendanceEvent();
 				attendanceEvent.setTime(formattedPunchIn);
 				attendanceEvent.setEvent("Punch In");
 				formattedEvents.add(attendanceEvent);
@@ -106,11 +103,23 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 	}
 
 	@Override
-	public EmployeeRequestResult calculateAttendance(List<Object[]> punchData) {
+	public EmployeeRequestResult calculateAttendance(int id, int year, int month) {
 
 		try {
 
 			logger.info("calculating the Attendance");
+
+			List<Object[]> punchData = employeeAttendanceDAO.getPunchInAndPunchOutDataForYearAndMonthAndEmployee(id,
+					year, month);
+			// Retrieves the punch in and punch out data for the specified year, month, and employee ID from the DAO
+
+			if (punchData == null || punchData.isEmpty()) {
+
+				logger.warn("No attendance data found for year,month,employee ID");
+			}
+
+			YearMonth yearMonthObject = YearMonth.of(year, month);
+			int totalnoofdays = yearMonthObject.lengthOfMonth();
 
 			int daysWithMinimumHours = 0;
 
@@ -144,19 +153,30 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 					daysWithMinimumHours++;
 				}
 			}
+
+			int totalDays = totalnoofdays;
+
+			LocalDate current = LocalDate.now();
+			if (current.getYear() == year && current.getMonthValue() == month) {
+				totalDays = current.getDayOfMonth();
+			}
+
 			// Calculate the attendance percentage
-			int totalDays = workingHoursPerDay.size();
 			double attendancePercentage = (double) daysWithMinimumHours / totalDays * 100;
 
 			if (Double.isNaN(attendancePercentage)) {
 				attendancePercentage = 0.0;
 			}
-			
+
 			EmployeeRequestResult response = new EmployeeRequestResult();
 
 			response.setDayswithminhrs(daysWithMinimumHours);
 			response.setPercentage(attendancePercentage);
 			response.setTotaldays(totalDays);
+			response.setAttendanceData(workingHoursPerDay);
+
+			for (Map.Entry<LocalDateTime, Duration> map : workingHoursPerDay.entrySet())
+				System.out.println("key " + map.getKey() + "  value " + map.getValue());
 
 			logger.info("successfully calculated the attendance");
 
@@ -279,10 +299,9 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 			return Collections.emptyList();
 		}
 	}
-	
+
 	@Override
-	@Transactional
-	public void processExcelFile(MultipartFile file) throws IOException{
+	public void processExcelFile(MultipartFile file) throws IOException {
 		try (Workbook workbook = WorkbookFactory.create(file.getInputStream())) {
 
 			// Get the first sheet from the workbook
@@ -318,6 +337,9 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 				int nextIndex = employeeAttendanceDAO.getNextAttendanceRequestIndex(employeeId);
 				attendanceId.setEmplPIndex(nextIndex);
 				attendance.setAttendanceId(attendanceId);
+
+				System.out.println(attendanceId.getEmployeeId());
+				System.out.println(attendanceId.getEmplPIndex());
 
 				// insert the record into database using service
 				insertEmployeeAttendance(attendance);

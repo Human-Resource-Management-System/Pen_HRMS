@@ -19,7 +19,7 @@ public class PayRollServiceImplTest {
 	@Test
 	public void testCalculateBasicPay() {
 		double basicPay = 22500;
-		double result = payRollService.calculateBasicPay(basicPay);
+		double result = payRollService.calculateBasicPay(basicPay, 6);
 		Assert.assertEquals(result, basicPay);
 	}
 

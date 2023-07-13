@@ -108,8 +108,7 @@ public class EmployeeAttendanceServiceTest {
 		when(employeeAttendanceDAO.getPunchInAndPunchOutDataForYearAndMonthAndEmployee(1, 2023, 6))
 				.thenReturn(punchData);
 
-		EmployeeRequestResult result = employeeAttendanceService.calculateAttendance(
-				employeeAttendanceDAO.getPunchInAndPunchOutDataForYearAndMonthAndEmployee(1, 2023, 6));
+		EmployeeRequestResult result = employeeAttendanceService.calculateAttendance(1, 2023, 6);
 
 		assertNotNull(result);
 		assertEquals(result.getDayswithminhrs(), 2);
