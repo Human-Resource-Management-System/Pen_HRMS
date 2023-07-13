@@ -359,12 +359,12 @@ span
     <div class="full-page">
         <div class="navbar">
             <div>
-                <a href='https://www.pennanttech.com/'>PENNANT HRMS</a>
+                <a >PENNANT HRMS</a>
             </div>
             <nav>
                 <ul id='MenuItems'>
-                    <li><a href='#'>About Us</a></li>
-                    <li><a href='#'>Contact</a></li>
+                    <li><a href='https://www.pennanttech.com/'>About Us</a></li>
+                
                     <li><button class='loginbtn' onclick="document.getElementById('login-form').style.display='block'" style="width:auto;">Login</button></li>
                 </ul>
             </nav>
@@ -483,6 +483,7 @@ span
                 <div class="slide">
                     <img src="<c:url value='/images/image3.jpg' />" alt="Image 1">
                 </div>
+                
             </div>
         </div>
     </div>
