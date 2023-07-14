@@ -11,7 +11,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -107,8 +106,8 @@ public class OfferLetterController {
 	// insert the candidate data in emplomentOffers table , employmentOfferDocuments table and changing status of
 	// employee from NA to AC
 	@RequestMapping("/sendOfferLetter")
-	public ResponseEntity<String> redirectedFromOfferLetter(HrmsEmploymentOffer eofr, Model model,
-			HttpServletRequest request, HttpServletResponse response) {
+	public String redirectedFromOfferLetter(HrmsEmploymentOffer eofr, Model model, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		eofr.setOfferId(offerLetterDAO.getLatestEofrIdFromDatabase() + 1);
 		logger.info("setting refid");
@@ -146,7 +145,9 @@ public class OfferLetterController {
 		offerLetterDAO.updateCandidateStatus("cand_status", "AC");
 		logger.info("finally after all, now change candidate status from NA to AC");
 
-		return ResponseEntity.ok("SUCCESS");
+		List<Candidate> candidates = offerLetterDAO.findAllIssuedCandidates();
+		model.addAttribute("candidates", candidates);
+		return "offerCandidates";
 
 	}
 

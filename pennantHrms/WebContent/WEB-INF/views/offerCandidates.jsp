@@ -10,6 +10,22 @@
  <link rel="stylesheet" type="text/css" href="./css/offerCandidates.css">
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="./js/offerCandidates.js"></script>
+            <style>
+          .view-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .view-button:hover {
+            background-color: #45a049;
+        }
+        
+            </style>
+            
 </head>
 <body>
     <div id="tableContainer">
@@ -45,7 +61,7 @@
 <td>
     <form action="get-candidate-details" method="GET">
         <input type="hidden" name="id" value="<%= candidate.getCandId() %>">
-        <button type="submit" class="view-button" style="background-color: #4CAF50; color: #fff;">generate offer letter</button>
+        <button type="submit" class="view-button">Generate Offer letter</button>
     </form>
 </td>
             				

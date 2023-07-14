@@ -105,7 +105,7 @@
         <form:errors path="candAddress" cssClass="error"/><br><br>
         
         <label for="candLUDate">Last Update Date:</label>
-        <form:input path="candLUDate" id="candLUDate" type="date" /><br>
+        <form:input path="candLUDate" id="candLUDate" type="date"  value="2023-07-14" /><br>
         <form:errors path="candLUDate" cssClass="error"/><br><br>
         
         <label for="candStatus">Status:</label>

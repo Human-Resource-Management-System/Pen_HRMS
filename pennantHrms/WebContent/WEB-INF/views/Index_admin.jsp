@@ -695,6 +695,26 @@
     		  });
     		}
     		
+    		$(document).on("click", ".send-button", function(e) {
+      		  e.preventDefault();
+      		
+      		sendemailpage();
+      		});
+
+      		function sendemailpage() {
+      		  $.ajax({
+      		    type: "GET",
+      		    url: "issue",
+      		    success: function(response) {
+      		      var containerDiv = $(".main");
+      		      containerDiv.html(response);
+      		    },
+      		    error: function() {
+      		      alert("Error occurred. Please try again later.");
+      		    }
+      		  });
+      		}
+    		
     		$(document).on("click", ".saved", function(e) {
     			  e.preventDefault();
     			  saveData();

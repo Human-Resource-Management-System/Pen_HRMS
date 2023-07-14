@@ -4,6 +4,6 @@
     <title>Success</title>
 </head>
 <body>
-    <h1>Employee Details Updated Successfully!</h1>
+    <h1>Candidate Details Added Successfully!</h1>
 </body>
 </html>

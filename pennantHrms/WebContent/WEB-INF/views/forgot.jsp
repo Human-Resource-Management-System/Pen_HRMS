@@ -251,7 +251,7 @@ body {
       // Redirect to index.jsp after 2 seconds
       if(!otpValidated){
       setTimeout(function() {
-        window.location.href = "/holidayhrms/";
+        window.location.href = "/pennantHrms/";
       }, 1000);
       }
     }
@@ -402,7 +402,7 @@ body {
 
                            // Redirect to login.jsp after 2 seconds
                            setTimeout(function() {
-                             window.location.href = "/holidayhrms/";
+                             window.location.href = "/pennantHrms/";
                            }, 2000);
                             
 
@@ -432,7 +432,7 @@ body {
                    $("#container").empty().append(errorMessage);
                      
                      setTimeout(function() {
-                         window.location.href = "/holidayhrms/";
+                         window.location.href = "/pennantHrms/";
                        }, 2000);
                 }
               });

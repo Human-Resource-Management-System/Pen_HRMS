@@ -61,5 +61,4 @@ public class addinductionDOC {
 	public void setVerified(String verified) {
 		this.verified = verified;
 	}
-
 }
