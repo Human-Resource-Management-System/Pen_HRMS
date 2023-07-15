@@ -152,6 +152,7 @@ public class MailService implements MailServiceInterface {
 	public void sendLeaveRequestMail(HttpServletRequest request, HttpServletResponse response,
 			EmployeeLeaveInputModel leave, String managerEmail, String hrEmail) throws Exception {
 
+		
 		String renderedHtml = generateHtml("employeeLeaveRequestMail", "leaverequest", leave, request, response);
 
 		Session session = preProcess();

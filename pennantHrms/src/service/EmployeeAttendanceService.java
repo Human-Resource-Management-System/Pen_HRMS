@@ -2,11 +2,13 @@ package service;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,11 +32,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import DAO.EmployeeAttendanceDAOImpl;
 import DAO_Interfaces.EmployeeAttendanceDAO;
+import DAO_Interfaces.EmployeeLeaveRequestDAO;
 import models.AttendanceEvent;
 import models.EmployeeAttendance;
 import models.EmployeeAttendanceId;
+import models.EmployeeLeaveRequest;
 import models.EmployeeRequestResult;
 import service_interfaces.EmployeeAttendanceServiceInterface;
+import service_interfaces.EmployeeLeaveServiceInterface;
 
 @Service
 public class EmployeeAttendanceService implements EmployeeAttendanceServiceInterface {
@@ -45,13 +50,15 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 
 	private EmployeeAttendance attendance;
 	private EmployeeAttendanceId attendanceId;
+	private EmployeeLeaveRequestDAO leaveRequestDAO;
 
 	@Autowired
 	public EmployeeAttendanceService(EmployeeAttendanceDAO employeeAttendanceDAO, EmployeeAttendance attendance,
-			EmployeeAttendanceId attendanceId) {
+			EmployeeAttendanceId attendanceId,EmployeeLeaveRequestDAO leaveRequestDAO) {
 		this.employeeAttendanceDAO = employeeAttendanceDAO;
 		this.attendance = attendance;
 		this.attendanceId = attendanceId;
+		this.leaveRequestDAO = leaveRequestDAO;
 	}
 
 	@Transactional
@@ -101,6 +108,21 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 			return Collections.emptyList();
 		}
 	}
+	
+	
+	// get total working days
+	private int getTotalWorkingDays(int totalnoofdays,int year, int month) {
+		int totalWorkingDays = 0;
+		for (int day = 1; day <= totalnoofdays; day++) {
+		    LocalDate date = LocalDate.of(year, month, day);
+		    DayOfWeek dayOfWeek = date.getDayOfWeek();
+		    if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
+		        totalWorkingDays++;
+		    }
+		}
+		
+		return totalWorkingDays;	
+	}
 
 	@Override
 	public EmployeeRequestResult calculateAttendance(int id, int year, int month) {
@@ -119,10 +141,12 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 			}
 
 			YearMonth yearMonthObject = YearMonth.of(year, month);
+			
+			// total no of days in a month
 			int totalnoofdays = yearMonthObject.lengthOfMonth();
-
+			
+			int totalworkingdays  = getTotalWorkingDays(totalnoofdays, year, month);
 			int daysWithMinimumHours = 0;
-
 			Map<LocalDateTime, Duration> workingHoursPerDay = new HashMap<>();
 
 			// Iterate over the punch-in and punch-out data
@@ -154,13 +178,24 @@ public class EmployeeAttendanceService implements EmployeeAttendanceServiceInter
 				}
 			}
 
-			int totalDays = totalnoofdays;
-
+			int totalDays = totalworkingdays;
 			LocalDate current = LocalDate.now();
+			
+			// if attendance requested for current month
 			if (current.getYear() == year && current.getMonthValue() == month) {
-				totalDays = current.getDayOfMonth();
+				totalDays = getTotalWorkingDays(current.getDayOfMonth(), year, month);
 			}
-
+			
+			// get no of leaves taken in a month
+			int noofleaves = 0;
+			List<EmployeeLeaveRequest> leavesdata = leaveRequestDAO.getApprovedLeaveRequestsOfMonth(id, year, month);
+			for(EmployeeLeaveRequest leave : leavesdata) {
+				 noofleaves+=ChronoUnit.DAYS.between(leave.getApprovedLeaveStartDate(), leave.getApprovedLeaveEndDate()) + 1;
+			}
+			
+			
+			daysWithMinimumHours+=noofleaves;
+			
 			// Calculate the attendance percentage
 			double attendancePercentage = (double) daysWithMinimumHours / totalDays * 100;
 

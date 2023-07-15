@@ -109,4 +109,6 @@ public interface EmployeeLeaveRequestDAO {
 	 *                            job grade leaves data
 	 */
 	void updateJobGradeLeaveRequest(JobGradeLeavesOutModel jobGradeLeavesmodel);
+	
+	 List<EmployeeLeaveRequest> getApprovedLeaveRequestsOfMonth(int id, int year, int month);
 }

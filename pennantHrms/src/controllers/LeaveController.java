@@ -146,12 +146,10 @@ public class LeaveController {
 			try {
 				leaveRequestDAO.saveEmployeeLeaveRequest(leaveRequest);
 				employeeService.sendEmail(request, response, employeeLeaveInputModel);
+				logger.info("Leave request submitted successfully");
 			} catch (Exception e) {
-				logger.info("Error saving the Leave request");
+				logger.info("Error saving the Leave request",e);
 			}
-
-			logger.info("Leave request submitted successfully");
-
 			return ResponseEntity.ok("Success");
 
 		} catch (Exception e) {

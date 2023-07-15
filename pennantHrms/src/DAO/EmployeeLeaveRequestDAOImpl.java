@@ -35,7 +35,7 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 
 	// Retrieves the next leave request index for the given employee ID.
 	@Override
-	public int getNextLeaveRequestIndex(int employeeId){
+	public int getNextLeaveRequestIndex(int employeeId) {
 		logger.info("Getting the next index for the leave request");
 		String queryString = "SELECT COALESCE(MAX(lr.leaveRequestId.leaveRequestIndex), 0) + 1 "
 				+ "FROM EmployeeLeaveRequest lr " + "WHERE lr.leaveRequestId.employeeId = :employeeId";
@@ -56,7 +56,8 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 		return result;
 	}
 
-	// Retrieves the approved and pending employee leave requests for the given employee ID and year.
+	// Retrieves the approved and pending employee leave requests for the given
+	// employee ID and year.
 	@Override
 	public List<EmployeeLeaveRequest> getApprovedAndPendingEmployeeAndLeaveRequestData(int id, int year) {
 		logger.info("Getting the employee leaves which are approved and pending.");
@@ -89,7 +90,8 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 		return entityManager.find(EmployeeLeaveRequest.class, key);
 	}
 
-	// Retrieves the job grade wise leaves provided statistics for the given job grade ID.
+	// Retrieves the job grade wise leaves provided statistics for the given job
+	// grade ID.
 	@Override
 	public JobGradeWiseLeaves getJobGradeWiseLeaves(String jobGradeId) {
 		logger.info("getting the job grade wise leaves for an employee");
@@ -112,7 +114,7 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 	// Retrieves the job grade wise leaves provided statistics for all job grades.
 	@Override
 	public List<JobGradeWiseLeaves> getJobGradeWiseLeaves() {
-		
+
 		logger.info("getting the job grade wise leaves.");
 		String jpqlQuery = "SELECT jgwl FROM JobGradeWiseLeaves jgwl ";
 		TypedQuery<JobGradeWiseLeaves> query = entityManager.createQuery(jpqlQuery, JobGradeWiseLeaves.class);
@@ -124,7 +126,7 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 	// Retrieves the approved leave requests for the given employee ID and year.
 	@Override
 	public List<EmployeeLeaveRequest> getApprovedLeaveRequests(int id, int year) {
-		
+
 		logger.info("getting the approved leave requests");
 
 		String jpqlQuery = "SELECT elrq FROM EmployeeLeaveRequest elrq "
@@ -147,6 +149,7 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 		logger.info("Job Grade Leave request is added successfully.");
 	}
 
+	// update job grade leaves 
 	@Override
 	@Transactional
 	public void updateJobGradeLeaveRequest(JobGradeLeavesOutModel jobGradeLeavesmodel) {
@@ -158,9 +161,29 @@ public class EmployeeLeaveRequestDAOImpl implements EmployeeLeaveRequestDAO {
 		jobGradeWiseLeaves.setOtherLeavesPerYear(jobGradeLeavesmodel.getOtherLeaves());
 
 		entityManager.merge(jobGradeWiseLeaves);
-		
+
 		logger.info("successfully updated the job grade leave");
 
+	}
+
+	// get approved leaves in a month
+	@Override
+	public List<EmployeeLeaveRequest> getApprovedLeaveRequestsOfMonth(int id, int year, int month) {
+
+		logger.info("getting the approved leave requests for a month");
+
+		String jpqlQuery = "SELECT elrq FROM EmployeeLeaveRequest elrq "
+				+ "WHERE elrq.leaveRequestId.employeeId = :employeeId" + " AND elrq.approvedBy > 0"
+				+ " AND EXTRACT(YEAR FROM elrq.requestDateTime) = :year"
+				+ " AND EXTRACT(MONTH FROM elrq.requestDateTime) = :month";
+
+		TypedQuery<EmployeeLeaveRequest> query = entityManager.createQuery(jpqlQuery, EmployeeLeaveRequest.class);
+		query.setParameter("employeeId", id);
+		query.setParameter("year", year);
+		query.setParameter("month", month);
+		List<EmployeeLeaveRequest> result = query.getResultList();
+		logger.info("successfully got the approved leave requests.");
+		return result;
 	}
 
 }

@@ -7,6 +7,9 @@
                 $("#uploadStatus").addClass('attend-error-msg').text('Please select a file.');
                 return;
             }
+  
+  $('#uploadStatus').empty();
+
 
             // Show loading indicator
             $('#upload').html('Uploading...');
